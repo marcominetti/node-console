@@ -1,0 +1,11 @@
+{
+  "name": "node-console",
+  "version": "0.2.5",
+  "repository": "git://github.com/marcominetti/node-console",
+  "dependencies": {
+    "dish": "*",
+    "underscore": "*",
+    "ws": "*",
+    "underscore": "*"
+  }
+}
