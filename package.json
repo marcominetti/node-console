@@ -4,7 +4,6 @@
   "repository": "git://github.com/marcominetti/node-console",
   "dependencies": {
     "dish": "*",
-    "underscore": "*",
     "ws": "*",
     "underscore": "*"
   }
