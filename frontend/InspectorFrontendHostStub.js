@@ -280,3 +280,31 @@ WebInspector.RemoteDebuggingTerminatedScreen = function(reason)
 WebInspector.RemoteDebuggingTerminatedScreen.prototype = {
     __proto__: WebInspector.HelpScreen.prototype
 }
+
+WebInspector.RemoteDebuggingWaitingScreen = function(reason)
+{
+  WebInspector.HelpScreen.call(this, WebInspector.UIString("Detached from the target"));
+  var p = this.contentElement.createChild("p");
+  p.addStyleClass("help-section");
+  p.createChild("span").textContent = "Remote debugging has been terminated with reason: ";
+  p.createChild("span", "error-message").textContent = reason;
+  p.createChild("br");
+  p.createChild("br");
+  p.createChild("span").textContent = "Please wait while we're trying to re-attach to the target.";
+}
+
+WebInspector.RemoteDebuggingWaitingScreen.prototype = {
+  __proto__: WebInspector.HelpScreen.prototype
+}
+
+WebInspector.RemoteDebuggingConnectedScreen = function()
+{
+  WebInspector.HelpScreen.call(this, WebInspector.UIString("Attached to the target"));
+  var p = this.contentElement.createChild("p");
+  p.addStyleClass("help-section");
+  p.createChild("span").textContent = "Remote debugging has been connected.";
+}
+
+WebInspector.RemoteDebuggingConnectedScreen.prototype = {
+  __proto__: WebInspector.HelpScreen.prototype
+}
