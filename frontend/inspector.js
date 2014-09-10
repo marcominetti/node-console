@@ -332,13 +332,32 @@ WebInspector.loaded = function()
         WebInspector.socket.onmessage = function(message) { InspectorBackend.dispatch(message.data); }
         WebInspector.socket.onerror = function(error) { console.error(error); }
         WebInspector.socket.onopen = function() {
+            var ConnectedScreenModal = new WebInspector.RemoteDebuggingConnectedScreen();
+            ConnectedScreenModal.showModal();
+            setTimeout(function(){
+              ConnectedScreenModal.hide();
+            },1000);
             InspectorFrontendHost.sendMessageToBackend = WebInspector.socket.send.bind(WebInspector.socket);
             WebInspector.doLoadedDone();
         }
         WebInspector.socket.onclose = function() {
-            if (!WebInspector.socket._detachReason)
-                (new WebInspector.RemoteDebuggingTerminatedScreen("websocket_closed")).showModal();
-        }
+          (new WebInspector.RemoteDebuggingWaitingScreen("websocket closed")).showModal();
+          WebInspector.log('console detached from remote debugging agent, trying to reconnect','error')
+          setInterval(function(){
+            var ws;
+            if ("ws" in WebInspector.queryParamsObject)
+              ws = "ws://" + WebInspector.queryParamsObject.ws;
+            else if ("page" in WebInspector.queryParamsObject) {
+              var page = WebInspector.queryParamsObject.page;
+              var host = "host" in WebInspector.queryParamsObject ? WebInspector.queryParamsObject.host : window.location.host;
+              ws = "ws://" + host + "/devtools/page/" + page;
+            }
+            var test_socket = new WebSocket(ws);
+            test_socket.onopen = function(){
+              window.location.reload();
+            }
+          },1000);
+        };
         return;
     }
 
