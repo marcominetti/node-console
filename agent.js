@@ -98,7 +98,9 @@ var DevToolsAgent = function() {
                 result: result
             };
 
-            self.socket.send(JSON.stringify(response));
+           if (self.socket != null) {
+             self.socket.send(JSON.stringify(response));
+           }
         });
     };
 
