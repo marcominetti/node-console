@@ -26,7 +26,13 @@ The console.dir doesn't work properly and logs string representation instead of 
 ## Example
 ```javascript  
 var web_console = require('node-console');  
-web_console.start(9090, 9999, 3333, '0.0.0.0');  
+
+var frontend_port = 9090;
+var agent_port = 9999;
+var internal_port = 3333;
+var listen_address = '0.0.0.0';
+
+web_console.start(frontend_port,agent_port,internal_port,listen_address);  
 
 [...]  
 
