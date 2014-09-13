@@ -1,12 +1,12 @@
 {
   "name": "node-console",
   "repository": "git://github.com/marcominetti/node-console",
-  "homepage": "http://github.com/c4milo/node-webkit-agent",
   "version": "0.3.1",
-  "author": "Camilo Aguilar",
+  "author": "Marco Minetti",
   "dependencies": {
     "dish": "*",
     "ws": "*",
     "underscore": "*"
-  }
+  },
+  "main": "index.js"
 }

@@ -7,7 +7,7 @@ var format = require('url').format
   , exists = require('fs').exists
   , resolve = require('path').resolve;
 
-var port = 9090;
+var port = process.argv[4] || 9090;
 
 function handler (req, res) {
   var url, plate;
@@ -41,6 +41,6 @@ function handler (req, res) {
 
 server.on('request', handler);
 
-server.listen(port, function () {
+server.listen(port, process.argv[5] || '0.0.0.0',function () {
   console.log('console front-end listening on port %s', port);
 });
