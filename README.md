@@ -1,4 +1,4 @@
-# Node Console (based on Webkit Agent)
+# Node Web Console (based on Webkit Agent)
 
 ## Screenshot
 
