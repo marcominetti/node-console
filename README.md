@@ -17,6 +17,11 @@ _The agent must be loaded inside the node process you want to control. If you pa
 
 
 
+## Example
+The console from 0.3.3 supports ECMAScript 6 and 7 through [babel.js](https://github.com/babel/babel) project.
+
+
+
 ## ToDo
 
 The console.dir doesn't work properly and logs string representation instead of navigable object.
@@ -43,7 +48,7 @@ web_console.stop();
 ## License
 (The MIT License)
 
-Copyright 2014 Marco Minetti. All rights reserved.  
+Copyright 2014-2015 Marco Minetti. All rights reserved.  
 Copyright 2014 Camilo Aguilar. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
