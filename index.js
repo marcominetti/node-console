@@ -2,11 +2,11 @@
 
 var console_agent, console_server;
 
-exports.start = function(frontend_port,agent_port,internal_port,listen_address){
-  console_agent = new (require(__dirname + '/agent.js'))();
-  console_agent.start(agent_port||9999, listen_address||'0.0.0.0', internal_port||3333, false);
+exports.start = function(frontend_port,agent_port,listen_address){
+  console_agent = require(__dirname + '/agent.js');
+  console_agent.start(agent_port||9999, listen_address||'0.0.0.0');
 
-  console_server = require('child_process').spawn('node', [__dirname + '/server.js', agent_port||9999, internal_port||3333, frontend_port||9090, listen_address||'0.0.0.0']);
+  console_server = require('child_process').spawn('node', [__dirname + '/server.js', agent_port||9999, frontend_port||9090, listen_address||'0.0.0.0']);
 };
 
 exports.stop = function(){

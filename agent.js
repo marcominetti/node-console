@@ -1,200 +1,102 @@
 var agents = require('./lib');
-var spawn = require('child_process').spawn;
 var WebSocketServer = require('ws').Server;
 
-/**
- * DevToolsAgent
- * @constructor
- **/
-var DevToolsAgent = function() {
-    this.loadedAgents = {};
-    this.proxy = null;
-    this.server = null;
-    this.socket = null;
+var self = {};
+self.loadedAgents = {};
+self.server = null;
+self.frontends = [];
+
+self.onFrontendConnection = function(socket) {
+  self.frontends.push(socket);
+  socket.on('message', self.onFrontendMessage.bind(socket));
+  socket.on('close', (function(){
+    for(var i =0; i<self.frontends.length;i++){
+      if (self.frontends[i] === socket){
+        self.frontends.splice(i,1);
+      }
+    }
+  }).bind(socket));
+  socket.on('error', function(error) {
+    console.error(error);
+  });
 };
 
-(function() {
-    /**
-     * Spawns a new process with a websockets service proxy
-     * to serve devtools front-end requests.
-     *
-     * All the messages but debugging messages
-     * are sent to the main process. Debugger Agent lives in this proxy.
-     *
-     * @api private
-     **/
-    this.spawnProxy = function() {
-        var self = this;
+self.onFrontendMessage = function(message) {
+  var socket = this;
+  try {
+    data = JSON.parse(message);
+  } catch(e) {
+    console.error(e.stack);
+    return;
+  }
 
-        //Parent PID for the proxy to know to whom to send the SIGUSR1 signal
-        process.env.PARENT_PID = process.pid;
+  var id = data.id;
+  var command = data.method.split('.');
+  var domain = self.loadedAgents[command[0]];
+  var method = command[1];
+  var params = data.params;
 
-        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js',this.port,this.host,this.internal_port,this.log], process.argv, {
-            env: process.env,
-            cwd: __dirname
-        });
+  if (!domain || !domain[method]) {
+    //console.warn('%s is not implemented', data.method);
+    return;
+  }
 
-        this.proxy.stderr.setEncoding('utf8');
-        this.proxy.stderr.on('data', function (data) {
-            console.error(data);
-        });
-
-        this.proxy.stdout.setEncoding('utf8');
-        this.proxy.stdout.on('data', function (data) {
-            if(this.log === true)
-                console.log(data);
-        });
+  domain[method](params, function(result) {
+    var response = {
+      id: id,
+      result: result
     };
 
-    /**
-     * Proxy connection handler
-     *
-     * @param {net.Socket} socket The just opened network socket.
-     * @api private
-     **/
-    this.onProxyConnection = function(socket) {
-        if(this.log === true) {
-            console.log('webkit-devtools-agent: A proxy got connected.');
-            console.log('webkit-devtools-agent: Waiting for commands...');
-        }
+    socket.send(JSON.stringify(response));
+  });
+};
 
-        this.socket = socket;
-        this.socket.on('message', this.onProxyData.bind(this));
-        this.socket.on('error', function(error) {
-            console.error(error);
-        });
-    };
+self.notify = function(notification) {
+  self.frontends.forEach(function(socket){socket.send(JSON.stringify(notification))});
+};
 
-    /**
-     * Handler for data events coming from the proxy process.
-     *
-     * @param {String} message A message coming from the proxy process.
-     * @api private
-     **/
-    this.onProxyData = function(message) {
-        var self = this;
+self.loadAgents = function() {
+  var runtimeAgent = new agents.Runtime(self.notify);
 
-        try {
-            data = JSON.parse(message);
-        } catch(e) {
-            console.log(e.stack);
-            return;
-        }
+  for (var agent in agents) {
+    if (typeof agents[agent] == 'function' && agent != 'Runtime') {
+      self.loadedAgents[agent] = new agents[agent](self.notify, runtimeAgent);
+    }
+  }
+  self.loadedAgents.Runtime = runtimeAgent;
+};
 
-        var id = data.id;
-        var command = data.method.split('.');
-        var domain = this.loadedAgents[command[0]];
-        var method = command[1];
-        var params = data.params;
+module.exports = {
+  'start': function(port,host) {
+    self.port = port || 9999;
+    self.host = host || '0.0.0.0';
 
-        if (!domain || !domain[method]) {
-            console.warn('%s is not implemented', data.method);
-            return;
-        }
+    if (self.server) return;
 
-        domain[method](params, function(result) {
-            var response = {
-                id: id,
-                result: result
-            };
+    self.server = new WebSocketServer({
+      port: self.port,
+      host: self.host
+    });
 
-           if (self.socket != null) {
-             self.socket.send(JSON.stringify(response));
-           }
-        });
-    };
+    self.server.on('listening', function() {
+      self.loadAgents();
+    });
+    self.server.on('connection', self.onFrontendConnection);
+  },
+  'stop': function() {
+    frontends.forEach(function(socket){
+      socket.close();
+    });
 
-    /**
-     * Notification function in charge of sending events
-     * to the front-end following the protocol specified
-     * at https://developers.google.com/chrome-developer-tools/docs/protocol/1.0
-     *
-     * @param {Object} A notification object that follows devtools protocol 1.0
-     * @api private
-     **/
-    this.notify = function(notification) {
-        if (!this.socket) return;
-        this.socket.send(JSON.stringify(notification));
-    };
+    if (server) {
+      server.close();
+      server = null;
+    }
+  }
+}
 
-    /**
-     * Loads every agent required at the top of this file.
-     * @private
-     **/
 
-    this.loadAgents = function() {
-        var runtimeAgent = new agents.Runtime(this.notify.bind(this));
 
-        for (var agent in agents) {
-            if (typeof agents[agent] == 'function' && agent != 'Runtime') {
-                this.loadedAgents[agent] = new agents[agent](this.notify.bind(this), runtimeAgent);
-            }
-        }
-        this.loadedAgents.Runtime = runtimeAgent;
-    };
 
-    /**
-     * Starts node-webkit-agent
-     *
-     * @api public
-     **/
-    this.start = function(port,host,internal_port,log) {
-        var self = this;
 
-	this.port = port || process.env.DEBUG_PORT || 9999;
-	this.host = host || process.env.DEBUG_HOST || 'localhost';
-	this.internal_port = internal_port || process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
-	this.log = (log !== undefined) ? log : ((process.env.WEBKIT_AGENT_INTERNAL_LOG==='true') || true);
-        
-if (this.server) return;
-
-        this.server = new WebSocketServer({
-            port: this.internal_port,
-            host: this.host
-        });
-
-        this.server.on('listening', function() {
-            if(this.log === true)
-                console.log('webkit-devtools-agent: Spawning websocket ' +
-                'service process...');
-
-            //Spawns webkit devtools proxy / websockets server
-            self.spawnProxy();
-
-            self.loadAgents();
-        });
-        this.server.on('connection', this.onProxyConnection.bind(this));
-    };
-
-    /**
-     * Stops node-webkit-agent
-     *
-     * @api public
-     **/
-    this.stop = function() {
-        if (this.socket) {
-            this.socket.close();
-            this.socket = null;
-        }
-
-        if (this.proxy && this.proxy.pid) {
-            if(this.log === true)
-                console.log('webkit-devtools-agent: Terminating websockets service' +
-                ' with PID: ' + this.proxy.pid + '...');
-            process.kill(this.proxy.pid, 'SIGTERM');
-        }
-
-        if (this.server) {
-            this.server.close();
-            this.server = null;
-            if(this.log === true)
-                console.log('webkit-devtools-agent: stopped');
-        }
-    };
-}).call(DevToolsAgent.prototype);
-
-/**
- * Export a instance constructor of the main function.
- **/
-module.exports = exports = DevToolsAgent;
 
