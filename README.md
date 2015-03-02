@@ -34,10 +34,9 @@ var web_console = require('node-console');
 
 var frontend_port = 9090;
 var agent_port = 9999;
-var internal_port = 3333;
 var listen_address = '0.0.0.0';
 
-web_console.start(frontend_port,agent_port,internal_port,listen_address);  
+web_console.start(frontend_port,agent_port,listen_address);  
 
 [...]  
 
