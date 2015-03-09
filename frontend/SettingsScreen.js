@@ -331,7 +331,7 @@ WebInspector.GenericSettingsTab = function()
     }
 
     p = this._appendSection(WebInspector.UIString("Console"));
-    p.appendChild(this._createCheckboxSetting(WebInspector.UIString("Log XMLHttpRequests"), WebInspector.settings.monitoringXHREnabled));
+    //p.appendChild(this._createCheckboxSetting(WebInspector.UIString("Log XMLHttpRequests"), WebInspector.settings.monitoringXHREnabled));
     p.appendChild(this._createCheckboxSetting(WebInspector.UIString("Preserve log upon navigation"), WebInspector.settings.preserveConsoleLog));
 
     if (WebInspector.extensionServer.hasExtensions()) {
