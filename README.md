@@ -17,8 +17,8 @@ _The agent must be loaded inside the node process you want to control. If you pa
 
 
 
-## Example
-The console from 0.3.3 supports ECMAScript 6 and 7 through [babel.js](https://github.com/babel/babel) project.
+## Experimental
+The console from 0.3.5 supports ECMAScript 6 and 7 through [babel.js](https://github.com/babel/babel) project.
 
 
 
@@ -35,8 +35,9 @@ var web_console = require('node-console');
 var frontend_port = 9090;
 var agent_port = 9999;
 var listen_address = '0.0.0.0';
+var ecmascript_version = 5;      // supports values: 5,6,7 (through babel.js)
 
-web_console.start(frontend_port,agent_port,listen_address);  
+web_console.start(frontend_port,agent_port,listen_address,ecmascript_version);
 
 [...]  
 

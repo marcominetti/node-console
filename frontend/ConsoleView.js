@@ -676,7 +676,12 @@ WebInspector.ConsoleView.prototype = {
             
             this._printResult(result, wasThrown, commandMessage);
         }
-        WebInspector.runtimeModel.evaluate(text, "console", useCommandLineAPI, false, false, true, printResult.bind(this));
+
+        var code = text;
+        if (WebInspector.queryParamsObject["babel"] != null && WebInspector.queryParamsObject["babel"] !== "5"){
+          code = esnext.transform(text);
+        }
+        WebInspector.runtimeModel.evaluate(code, "console", useCommandLineAPI, false, false, true, printResult.bind(this));
 
         WebInspector.userMetrics.ConsoleEvaluated.record();
     },
