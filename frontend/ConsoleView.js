@@ -445,11 +445,11 @@ WebInspector.ConsoleView.prototype = {
 
         var contextMenu = new WebInspector.ContextMenu(event);
 
-        function monitoringXHRItemAction()
-        {
-            WebInspector.settings.monitoringXHREnabled.set(!WebInspector.settings.monitoringXHREnabled.get());
-        }
-        contextMenu.appendCheckboxItem(WebInspector.UIString("Log XMLHttpRequests"), monitoringXHRItemAction.bind(this), WebInspector.settings.monitoringXHREnabled.get());
+        //function monitoringXHRItemAction()
+        //{
+            //WebInspector.settings.monitoringXHREnabled.set(!WebInspector.settings.monitoringXHREnabled.get());
+        //}
+        //contextMenu.appendCheckboxItem(WebInspector.UIString("Log XMLHttpRequests"), monitoringXHRItemAction.bind(this), WebInspector.settings.monitoringXHREnabled.get());
 
         function preserveLogItemAction()
         {
