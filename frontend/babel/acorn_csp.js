@@ -4356,7 +4356,7 @@ switch(str.length){case 5:switch(str){case "break":case "catch":case "throw":cas
 
     expectRelational("<");
     while (!isRelational(">")) {
-      node.params.push(parseIdent());
+      node.params.push(parseTypeAnnotatableIdentifier());
       if (!isRelational(">")) {
         expect(_comma);
       }
