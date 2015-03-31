@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "console"
+    ],
+    "scripts": [
+        "ConsoleViewOverrides.js"
+    ]
+}

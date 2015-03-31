@@ -1,0 +1,10 @@
+{
+    "dependencies": [
+        "console"
+    ],
+    "scripts": [
+        "ConsoleOverrides.js",
+        "acorn/acorn_csp.js",
+        "babel/browser.js"
+    ]
+}

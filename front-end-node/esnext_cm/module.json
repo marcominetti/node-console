@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "sources"
+    ],
+    "scripts": [
+        "CodeMirrorOverrides.js"
+    ]
+}

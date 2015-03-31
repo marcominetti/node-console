@@ -1,0 +1,20 @@
+[
+  { "name": "node", "type": "autostart" },  
+  { "name": "node/profiler", "type": "autostart" },
+  { "name": "node/console", "type": "autostart" },
+  { "name": "node/sources", "type": "autostart" },
+  { "name": "node/settings", "type": "autostart" },
+  { "name": "node/sdk", "type": "autostart" },
+  { "name": "node/components", "type": "autostart" },
+  { "name": "node/esnext_cm", "type": "autostart" },
+  { "name": "node/esnext_console", "type": "autostart" },
+  { "name": "node/console-view", "type": "autostart" },
+  { "name": "node/console-target", "type": "autostart" },
+  { "name": "node/main", "type": "autostart" },
+  { "name": "node/ui", "type": "autostart" },
+  { "name": "audits", "type": "exclude"},
+  { "name": "network", "type": "exclude"},
+  { "name": "elements", "type": "exclude"},
+  { "name": "timeline", "type": "exclude"},
+  { "name": "resources", "type": "exclude"}
+]
