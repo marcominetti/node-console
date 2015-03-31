@@ -1,7 +1,7 @@
 var web_console = require('./');
 
 var frontend_port = 9090;
-var agent_port = 9999;
+var agent_port = 9958;
 var listen_address = '0.0.0.0';
 var ecmascript_version = 7;      // supports values: 5,6,7 (through babel.js)
 

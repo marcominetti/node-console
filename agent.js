@@ -68,7 +68,7 @@ self.loadAgents = function() {
 
 module.exports = {
   'start': function(port,host) {
-    self.port = port || 9999;
+    self.port = port || 9958;
     self.host = host || '0.0.0.0';
 
     if (self.server) return;
