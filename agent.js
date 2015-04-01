@@ -23,6 +23,7 @@ self.onFrontendConnection = function(socket) {
 
 self.onFrontendMessage = function(message) {
   var socket = this;
+  var data;
   try {
     data = JSON.parse(message);
   } catch(e) {
