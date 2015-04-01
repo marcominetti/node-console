@@ -82,7 +82,7 @@ var handleBackendOpen = function(){
 };
 
 var handleBackendMessage = function(message) {
-    frontends.forEach(function(socket){socket.send(message)});
+    this.send(message);
 };
 
 function handleServerListening() {
