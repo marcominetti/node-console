@@ -225,8 +225,8 @@ WebInspector.Target.prototype = {
     _dispose: function()
     {
         this.debuggerModel.dispose();
-        this.networkManager.dispose();
-        this.cpuProfilerModel.dispose();
+        //this.networkManager.dispose();
+        //this.cpuProfilerModel.dispose();
     },
 
     /**
