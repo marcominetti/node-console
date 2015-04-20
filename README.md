@@ -1,4 +1,4 @@
-# Node Web Console (based on Webkit Agent)
+# Node Web Console (based on Webkit Agent and Blink Tools)
 
 ## Screenshot
 
@@ -19,12 +19,6 @@ _The agent must be loaded inside the node process you want to control. If you pa
 
 ## Experimental
 The console from 0.3.5 supports ECMAScript 6 and 7 through [babel.js](https://github.com/babel/babel) project.
-
-
-
-## ToDo
-
-The console.dir doesn't work properly and logs string representation instead of navigable object.
 
 
 
