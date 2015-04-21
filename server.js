@@ -42,6 +42,9 @@ var handleFrontendConnection = function (socket) {
   socket.backend = new WebSocket('ws://localhost:' + debugPort);
   socket.backend.on('open', handleBackendOpen.bind(socket));
   socket.backend.on('message', handleBackendMessage.bind(socket));
+  socket.backend.on('error', function(){
+    socket.close();
+  });
   socket.backend.on('close', function(){
     socket.close();
   });
