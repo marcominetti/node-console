@@ -49,6 +49,9 @@ var handleFrontendConnection = function (socket) {
     socket.close();
   });
   socket.on('message', handleFrontendMessage.bind(socket));
+  socket.on('error', function(){
+    socket.close();
+  });
   socket.on('close', function(){
     for(var i =0; i<frontends.length;i++){
       if (frontends[i] === socket){
