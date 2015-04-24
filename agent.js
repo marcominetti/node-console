@@ -85,13 +85,13 @@ module.exports = {
     self.server.on('connection', self.onFrontendConnection);
   },
   'stop': function() {
-    frontends.forEach(function(socket){
+    self.frontends.forEach(function(socket){
       socket.close();
     });
 
-    if (server) {
-      server.close();
-      server = null;
+    if (self.server) {
+      self.server.close();
+      self.server = null;
     }
   }
 }
