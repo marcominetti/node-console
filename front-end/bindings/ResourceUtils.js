@@ -34,12 +34,12 @@
  */
 WebInspector.resourceForURL = function(url)
 {
-    var targets = WebInspector.targetManager.targets();
+    /*var targets = WebInspector.targetManager.targets();
     for (var i = 0; i < targets.length; ++i) {
         var resource = targets[i].resourceTreeModel.resourceForURL(url);
         if (resource)
             return resource;
-    }
+    }*/
     return null;
 }
 
@@ -48,9 +48,9 @@ WebInspector.resourceForURL = function(url)
  */
 WebInspector.forAllResources = function(callback)
 {
-    var targets = WebInspector.targetManager.targets();
+    /*var targets = WebInspector.targetManager.targets();
     for (var i = 0; i < targets.length; ++i)
-        targets[i].resourceTreeModel.forAllResources(callback);
+        targets[i].resourceTreeModel.forAllResources(callback);*/
 }
 
 /**
