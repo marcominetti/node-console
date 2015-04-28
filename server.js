@@ -88,7 +88,9 @@ var handleBackendOpen = function(){
 };
 
 var handleBackendMessage = function(message) {
+  try {
     this.send(message);
+  } catch(err) {}
 };
 
 function handleServerListening() {
