@@ -48,12 +48,18 @@ self.onFrontendMessage = function(message) {
       result: result
     };
 
-    socket.send(JSON.stringify(response));
+    try {
+      socket.send(JSON.stringify(response));
+    } catch (err) {}
   });
 };
 
 self.notify = function(notification) {
-  self.frontends.forEach(function(socket){socket.send(JSON.stringify(notification))});
+  self.frontends.forEach(function(socket){
+    try {
+      socket.send(JSON.stringify(notification))
+    } catch (err) {}
+  });
 };
 
 self.loadAgents = function() {
