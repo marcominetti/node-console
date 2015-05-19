@@ -103,18 +103,9 @@ WebInspector._esnext_transform = function(text){
     };
   }
   var generated = babel.transform.fromAst(ast,null,{
-    'experimental': true,
-    'playground': false,
-    'format': {
-      'parentheses': true,
-      'comments': false,
-      'compact': false,
-      'indent': {
-        'style': '  ',
-        'base': 1
-      }
-    },
-    'sourceMap': false,
+    'stage': 1,
+    'compact': false,
+    'sourceMaps': false,
     'code': true,
     'ast': false
   });
