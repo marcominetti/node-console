@@ -108,22 +108,22 @@ function DebugServer() {}
 inherits(DebugServer, EventEmitter);
 
 DebugServer.prototype.start = function(options) {
-  this._config = extend({}, options);
-  this._isHTTPS = this._config.sslKey && this._config.sslCert ? true : false;
+  this.config = extend({}, options);
+  this.isHTTPS = this.config.sslKey && this.config.sslCert ? true : false;
 
   var app = express();
   var httpServer;
 
-  if (this._isHTTPS) {
+  if (this.isHTTPS) {
     httpServer = https.createServer({
-      key: fs.readFileSync(this._config.sslKey, {encoding: 'utf8'}),
-      cert: fs.readFileSync(this._config.sslCert, {encoding: 'utf8'})
+      key: fs.readFileSync(this.config.sslKey, {encoding: 'utf8'}),
+      cert: fs.readFileSync(this.config.sslCert, {encoding: 'utf8'})
     }, app);
   } else {
     httpServer = http.createServer(app);
   }
 
-  this._httpServer = httpServer;
+  this.httpServer = httpServer;
 
   app.use(favicon(path.join(__dirname, './front-end-node/Images/favicon.png')));
   app.get('/', (function(req,res){
@@ -141,32 +141,30 @@ DebugServer.prototype.start = function(options) {
 
   httpServer.on('listening', handleServerListening.bind(this));
   httpServer.on('error', handleServerError.bind(this));
-  httpServer.listen(this._config.webPort, this._config.webHost);
+  httpServer.listen(this.config.webPort, this.config.webHost);
 };
 
 DebugServer.prototype._getDebuggerPort = function(url) {
-  return parseInt((/[\?\&]port=(\d+)/.exec(url) || [null, this._config.debugPort])[1], 10);
+  return parseInt((/[\?\&]port=(\d+)/.exec(url) || [null, this.config.debugPort])[1], 10);
 };
 
-DebugServer.prototype.close = function() {
+DebugServer.prototype.stop = function() {
+  if (this.httpServer) {
+    this.httpServer.close();
+    this.httpServer = null;
+  }
   if (this.wsServer) {
     this.wsServer.close();
     this.emit('close');
+    this.wsServer = null;
   }
 };
 
 DebugServer.prototype.address = function() {
-  var address = this._httpServer.address();
-  var config = this._config;
-  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this._isHTTPS,config.babel);
+  var address = this.httpServer.address();
+  var config = this.config;
+  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this.isHTTPS,config.babel);
   return address;
 };
 
-exports = new DebugServer();
-
-exports.start({
-  webHost: process.argv[4] || '0.0.0.0',
-  webPort: process.argv[3] || 9090,
-  debugPort: process.argv[2] || 9958,
-  babel: process.argv[5] || '5'
-});
+module.exports = new DebugServer();
