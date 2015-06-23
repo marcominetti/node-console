@@ -28,7 +28,7 @@ function buildUrl(inspectorHost, inspectorPort, debugPort, fileToShow, isHttps, 
 
 function debugAction(req, res) {
   if (!req.query.ws) {
-    var newUrl = this.address();
+    var newUrl = this.address(req.headers.host.replace(/\:.*$/,'')).url;
     return res.redirect(newUrl);
   }
   res.sendFile(path.join(WEBROOT, 'inspector.html'));
@@ -126,9 +126,7 @@ DebugServer.prototype.start = function(options) {
   this.httpServer = httpServer;
 
   app.use(favicon(path.join(__dirname, './front-end-node/Images/favicon.png')));
-  app.get('/', (function(req,res){
-    res.redirect(this.address().url);
-  }).bind(this));
+  app.get('/', debugAction.bind(this));
   app.get('/debug', debugAction.bind(this));
   app.use('/node', express.static(OVERRIDES));
   app.use(express.static(WEBROOT));
@@ -160,10 +158,10 @@ DebugServer.prototype.stop = function() {
   }
 };
 
-DebugServer.prototype.address = function() {
+DebugServer.prototype.address = function(host) {
   var address = this.httpServer.address();
   var config = this.config;
-  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this.isHTTPS,config.babel);
+  address.url = buildUrl(host||config.webHost, address.port, config.debugPort, null, this.isHTTPS,config.babel);
   return address;
 };
 
