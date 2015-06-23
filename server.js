@@ -28,7 +28,10 @@ function buildUrl(inspectorHost, inspectorPort, debugPort, fileToShow, isHttps, 
 
 function debugAction(req, res) {
   if (!req.query.ws) {
-    var newUrl = this.address(req.headers.host.replace(/\:.*$/,'')).url;
+    var urlParts = req.headers.host.split(':'),
+      config = this.config;
+
+    var newUrl = buildUrl(urlParts[0], urlParts[1], config.debugPort, null, this.isHTTPS, config.babel);
     return res.redirect(newUrl);
   }
   res.sendFile(path.join(WEBROOT, 'inspector.html'));
@@ -158,10 +161,10 @@ DebugServer.prototype.stop = function() {
   }
 };
 
-DebugServer.prototype.address = function(host) {
+DebugServer.prototype.address = function() {
   var address = this.httpServer.address();
   var config = this.config;
-  address.url = buildUrl(host||config.webHost, address.port, config.debugPort, null, this.isHTTPS,config.babel);
+  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this.isHTTPS, config.babel);
   return address;
 };
 
