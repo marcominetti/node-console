@@ -102,6 +102,7 @@ body /deep/ .vbox {
     display: flex;
     flex-direction: column !important;
     position: relative;
+    overflow: auto;
 }
 
 body /deep/ .flex-auto {

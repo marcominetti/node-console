@@ -1657,7 +1657,7 @@ body.inactive .sidebar-tree-item.selected {
 }
 
 .root-view {
-    overflow: auto;
+    overflow: hidden;
     position: absolute !important;
     left: 0;
     top: 0;
