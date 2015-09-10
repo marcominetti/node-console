@@ -7,7 +7,6 @@
   { "name": "node/sdk", "type": "autostart" },
   { "name": "node/components", "type": "autostart" },
   { "name": "node/esnext_cm", "type": "autostart" },
-  { "name": "node/esnext_console", "type": "autostart" },
   { "name": "node/console-view", "type": "autostart" },
   { "name": "node/console-target", "type": "autostart" },
   { "name": "node/main", "type": "autostart" },
