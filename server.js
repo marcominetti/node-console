@@ -13,14 +13,14 @@ var http = require('http'),
     OVERRIDES = path.join(__dirname, './front-end-node'),
     WEBROOT = path.join(__dirname, './front-end');
    
-function buildUrl(inspectorHost, inspectorPort, debugPort, fileToShow, isHttps, babel) {
+function buildUrl(inspectorHost, inspectorPort, debugPort, fileToShow, isHttps) {
   var host = inspectorHost == '0.0.0.0' ? '127.0.0.1' : inspectorHost;
   var parts = {
     protocol: isHttps ? 'https' : 'http',
     hostname: host,
     port: inspectorPort,
     pathname: '/debug',
-    search: '?ws=' + host + ':' + inspectorPort + '&babel=' + babel + '&port=' + debugPort
+    search: '?ws=' + host + ':' + inspectorPort + '&port=' + debugPort
   };
 
   return url.format(parts);
@@ -31,7 +31,7 @@ function debugAction(req, res) {
     var urlParts = req.headers.host.split(':'),
       config = this.config;
 
-    var newUrl = buildUrl(urlParts[0], urlParts[1], config.debugPort, null, this.isHTTPS, config.babel);
+    var newUrl = buildUrl(urlParts[0], urlParts[1], config.debugPort, null, this.isHTTPS);
     return res.redirect(newUrl);
   }
   res.sendFile(path.join(WEBROOT, 'inspector.html'));
@@ -164,7 +164,7 @@ DebugServer.prototype.stop = function() {
 DebugServer.prototype.address = function() {
   var address = this.httpServer.address();
   var config = this.config;
-  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this.isHTTPS, config.babel);
+  address.url = buildUrl(config.webHost, address.port, config.debugPort, null, this.isHTTPS);
   return address;
 };
 

@@ -3,13 +3,12 @@
 var console_agent = require('./agent'),
   console_server = require('./server');
 
-exports.start = function(frontend_port,agent_port,listen_address,ecmascript_version){
+exports.start = function(frontend_port,agent_port,listen_address){
   console_agent.start(agent_port||9958, listen_address||'0.0.0.0');
   console_server.start({
     webHost: listen_address || '0.0.0.0',
     webPort: frontend_port || 9090,
-    debugPort: agent_port || 9958,
-    babel: ecmascript_version || '5'
+    debugPort: agent_port || 9958
   });
 };
 
