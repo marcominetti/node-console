@@ -30,7 +30,7 @@ RUN /usr/local/bin/node -v
 RUN /usr/local/bin/npm -v
 
 RUN mkdir /app/
-RUN cd /app/ && npm install node-console
+RUN cd /app/ && npm install node-console@0.3.36
 
 EXPOSE 9090 9999
 
