@@ -2,7 +2,7 @@
   "name": "node-console",
   "repository": "git://github.com/marcominetti/node-console",
   "description": "Node Web Console (based on Webkit Agent)",
-  "version": "0.3.35",
+  "version": "0.3.36",
   "author": "Marco Minetti",
   "dependencies": {
     "dish": "*",
